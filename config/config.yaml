@@ -1,0 +1,33 @@
+# File paths configuration
+paths:
+  input:
+    json_file_prefix: "-Verbrauch.json"  # This will be combined with year-month from after_date
+  output:
+    csv_file_prefix: "-consumption.csv"  # This will be combined with year-month from after_date
+
+# Directory structure
+directories:
+  data: "data"
+  input: "input"
+  output: "output"
+
+# CSV configuration
+csv:
+  header: ["Datetime", "Power"]
+  empty_columns: 9
+  decimal_separator: ","
+  date_format: "%Y%m%d:%H"
+
+# Data processing
+processing:
+  consumption_multiplier: 1000
+  decimal_places: 2 
+
+# Tibber API configuration
+tibber:
+  access_token: "NO-TOKEN-YET"
+  # Date range configuration
+  # Format: "YYYY-MM; YYYY-MM" (start_month; end_month)
+  # Example: "2024-01; 2024-03" will fetch data for January through March 2024
+  date_range: "2024-06; 2025-04"
+  first:  # Optional, will use default if not specified 
