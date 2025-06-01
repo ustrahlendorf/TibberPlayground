@@ -64,9 +64,10 @@ def transform_consumption_to_csv(json_file_path, output_csv_path, config):
                 from_time = datetime.fromisoformat(node['from'].replace('Z', '+00:00'))
                 formatted_time = from_time.strftime(config['csv']['date_format'])
                 
-                # Convert consumption to string with configured decimal separator
-                consumption_value = f"{round(node['consumption'] * config['processing']['consumption_multiplier'], config['processing']['decimal_places']):.{config['processing']['decimal_places']}f}".replace('.', config['csv']['decimal_separator'])
-                
+                # Calculate and format consumption value
+                consumption = float(node['consumption']) * config['processing']['consumption_multiplier']
+                consumption_value = f"{consumption:.{config['processing']['decimal_places']}f}".replace('.', config['csv']['decimal_separator'])
+
                 # Write row with empty columns
                 writer.writerow([formatted_time, consumption_value] + [''] * config['csv']['empty_columns'])
         
