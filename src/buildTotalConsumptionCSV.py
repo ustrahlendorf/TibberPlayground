@@ -30,11 +30,35 @@ class ConsumptionCSVBuilder:
         self.date_format = self.config['csv']['date_format']
         
     def _find_project_root(self) -> Path:
-        """Find the project root directory by looking for the config directory."""
-        current_dir = Path(__file__).resolve().parent.parent.parent
-        if (current_dir / "config").exists():
-            return current_dir
-        raise FileNotFoundError("Could not find project root directory")
+        """
+        Find the project root directory by looking for the config directory.
+        Searches in the following order:
+        1. Script's directory
+        2. Parent directories up to 3 levels
+        3. Current working directory
+        
+        Returns:
+            Path: The project root directory
+            
+        Raises:
+            FileNotFoundError: If project root cannot be found
+        """
+        # List of directories to check, in order of preference
+        search_paths = [
+            Path(__file__).resolve().parent,  # Script's directory
+            *[Path(__file__).resolve().parent.parents[i] for i in range(3)],  # Up to 3 parent levels
+            Path.cwd()  # Current working directory
+        ]
+        
+        for directory in search_paths:
+            if (directory / "config").exists():
+                return directory
+                
+        raise FileNotFoundError(
+            "Could not find project root directory. "
+            "Please ensure you're running the script from within the project directory "
+            "or that the config directory exists in the expected location."
+        )
         
     def _get_output_dir(self) -> Path:
         """Get the output directory path from configuration."""
